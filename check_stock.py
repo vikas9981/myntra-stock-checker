@@ -45,6 +45,11 @@ def check_stock():
         print(f"Navigating to product page: {PRODUCT_URL}")
         driver.get(PRODUCT_URL)
         time.sleep(10) 
+                # --- NEW LINE TO TAKE A SCREENSHOT ---
+        print("Taking screenshot...")
+        driver.save_screenshot("debug_screenshot.png")
+        print("Screenshot saved as debug_screenshot.png")
+        # ------------------------------------
 
         print(f"Searching for a DISABLED button for size '{DESIRED_SIZE}'...")
         driver.find_element(By.XPATH, DISABLED_BUTTON_XPATH)
