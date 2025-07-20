@@ -2,12 +2,10 @@
 
 import os
 import time
+import undetected_chromedriver as uc
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from webdriver_manager.chrome import ChromeDriverManager
 
 # New imports for our new email service
 from sendgrid import SendGridAPIClient
@@ -31,15 +29,15 @@ def check_stock():
     # This XPath looks for a button for our desired size that is explicitly marked as disabled.
     DISABLED_BUTTON_XPATH = f"//p[text()='{DESIRED_SIZE}']/ancestor::button[contains(@class, 'size-buttons-size-button-disabled')]"
 
-    print("Initializing Selenium WebDriver...")
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--window-size=1920,1080")
+    print("Initializing UNDETECTED Selenium WebDriver...")
+    # Use a simpler options object for this library
+    options = uc.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
 
-    service = ChromeService(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # NEW: This is the main change to initialize the driver
+    driver = uc.Chrome(options=options, use_subprocess=True)
     
     try:
         print(f"Navigating to product page: {PRODUCT_URL}")
