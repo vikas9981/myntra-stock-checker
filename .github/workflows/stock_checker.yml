@@ -1,12 +1,9 @@
 # .github/workflows/stock_checker.yml
-
 name: 'Myntra Stock Checker'
 
 on:
-  # Schedule to run at the beginning of every hour
   schedule:
     - cron: '0 * * * *'
-  # Allows you to run this workflow manually from the Actions tab for testing
   workflow_dispatch:
 
 jobs:
@@ -14,26 +11,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checks-out your repository so your job can access the code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Sets up a modern Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Step 3: Install the libraries from your requirements.txt file
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Step 4: Run your Python script using the secrets as environment variables
+          
       - name: Run stock check script
         env:
           PRODUCT_URL: ${{ secrets.PRODUCT_URL }}
           VERIFIED_SENDER_EMAIL: ${{ secrets.VERIFIED_SENDER_EMAIL }}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         run: python check_stock.py
+      
+      # --- ADD THIS NEW STEP AT THE END ---
+      - name: Upload screenshot artifact
+        if: always() # This ensures the screenshot is uploaded even if the script fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-screenshot
+          path: debug_screenshot.png
+      # ------------------------------------
