@@ -44,7 +44,7 @@ def check_stock():
     try:
         print(f"Navigating to product page: {PRODUCT_URL}")
         driver.get(PRODUCT_URL)
-        time.sleep(5) 
+        time.sleep(10) 
 
         print(f"Searching for a DISABLED button for size '{DESIRED_SIZE}'...")
         driver.find_element(By.XPATH, DISABLED_BUTTON_XPATH)
